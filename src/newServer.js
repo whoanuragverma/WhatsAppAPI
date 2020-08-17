@@ -7,10 +7,14 @@
 const app = require("express")();
 
 module.exports = () => {
-    app.use("/auth", require("./routes/authUser"));
-    app.listen(process.env.PORT || 7000, () => {
-        console.log(
-            `Service Started at http://localhost:${process.env.PORT || 7000}`
-        );
-    });
+    const io = require("socket.io").listen(
+        app.listen(process.env.PORT || 7000, () => {
+            console.log(
+                `Service Started at http://localhost:${
+                    process.env.PORT || 7000
+                }`
+            );
+        })
+    );
+    app.use("/auth", require("./routes/authUser")(io));
 };

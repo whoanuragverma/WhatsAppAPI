@@ -13,38 +13,118 @@
             }
             .main {
                 position: absolute;
-                top: 45%;
+                top: 48%;
                 left: 50%;
                 transform: translate(-50%, -50%);
                 text-align: center;
             }
+            .img {
+                height: 264px;
+            }
+
+            .loader {
+                -webkit-animation: loader_animation 1.5s infinite ease-in-out,
+                    rotate 2s infinite;
+                animation: loader_animation 1.5s infinite ease-in-out,
+                    rotate 2s infinite;
+                -webkit-transform-origin: center;
+                transform-origin: center;
+            }
+            svg {
+                padding-top: 10%;
+            }
+            @-webkit-keyframes rotate {
+                100% {
+                    -webkit-transform: rotate(360deg);
+                    transform: rotate(360deg);
+                }
+            }
+
+            @keyframes rotate {
+                100% {
+                    -webkit-transform: rotate(360deg);
+                    transform: rotate(360deg);
+                }
+            }
+            @-webkit-keyframes loader_animation {
+                0% {
+                    stroke-dasharray: 1, 200;
+                    stroke-dashoffset: 0;
+                }
+                50% {
+                    stroke-dasharray: 89, 200;
+                    stroke-dashoffset: -35;
+                }
+                100% {
+                    stroke-dasharray: 89, 200;
+                    stroke-dashoffset: -124;
+                }
+            }
+            @keyframes loader_animation {
+                0% {
+                    stroke-dasharray: 1, 200;
+                    stroke-dashoffset: 0;
+                }
+                50% {
+                    stroke-dasharray: 89, 200;
+                    stroke-dashoffset: -35;
+                }
+                100% {
+                    stroke-dasharray: 89, 200;
+                    stroke-dashoffset: -124;
+                }
+            }
         </style>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.js"></script>
     </head>
     <body>
         <div class="main">
             <h2>Scan this QR code with WhatsApp.</h2>
-            <img src="data:image/png;base64,<%= qr %>" />
-            <br /><br />
-            <p>This QR is valid only for <b class="timer">30</b> seconds.</p>
+            <div class="img">
+                <svg>
+                    <circle
+                        class="loader"
+                        r="20"
+                        cx="50%"
+                        cy="50%"
+                        fill="none"
+                        stroke-width="4"
+                        stroke="#7a7a7a"
+                    />
+                </svg>
+            </div>
             <br /><br />
             <small
                 >By logging in you agree the
-                <a href="#github_terms">Terms and Conditions</a>. This tool is
-                just for testing purposes and should not be used for sending any
-                kind of spam.</small
+                <a href="#github_terms">Terms and Conditions</a>.<br />
+                This tool is just for testing purposes and should not be used
+                for sending any kind of spam.<br /><br /><i
+                    >Refresh the page if QR code is not valid.</i
+                ></small
             >
         </div>
     </body>
     <script>
-        let timer = 29;
-        setInterval(() => {
-            document.querySelector(".timer").innerHTML = timer;
-            timer -= 1;
-            if (timer <= 0) {
-                document.querySelector("p").innerHTML =
-                    "This QR is no longer valid. Please wait for the page to refresh.";
-                window.location.reload();
-            }
-        }, 1000);
+        const socket = io();
+        socket.on("connect", () => {
+            console.log("[CLIENT] Connected to the server");
+            socket.on("QR", (data) => {
+                console.log("[CLIENT] QR changed");
+                const img = document.createElement("img");
+                img.setAttribute("src", "data:image/png;base64," + data);
+                if (document.querySelector("svg")) {
+                    document.querySelector("svg").remove();
+                }
+                if (document.querySelector(".img").children.length != 0) {
+                    document
+                        .querySelector(".img")
+                        .removeChild(document.querySelector("img"));
+                }
+                document.querySelector(".img").appendChild(img);
+            });
+        });
+        socket.on("disconnect", () => {
+            window.location.reload();
+        });
     </script>
 </html>

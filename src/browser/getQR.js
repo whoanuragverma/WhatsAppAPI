@@ -5,32 +5,33 @@
  ***********************************************/
 
 const puppeteer = require("puppeteer");
+const detectChange = require("./QRchange");
 
-module.exports = async () => {
-    const browser = await require("./index");
-    const page = await browser.newPage();
-    await page.setUserAgent(
-        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/85.0.4182.0 Safari/537.36"
-    );
-    await page.goto("https://web.whatsapp.com");
-    // move this code to a new file
-    const checkLogin = async () => {
-        return await page.evaluate(async () => {
-            return await new Promise((resolve) => {
-                setInterval(() => {
-                    const token = localStorage.getItem("WAToken1");
-                    if (token != null) {
-                        resolve(token);
-                    }
-                }, 500);
-            });
+// Prevents page from continously refreshing.
+let firstLoad = true;
+module.exports = async (io) => {
+    const page = await require("./index");
+    if (!firstLoad) {
+        await page.evaluate(() => {
+            window.location.reload();
         });
-    };
-    // till here
+    }
+    firstLoad = false;
     await page.waitForXPath(
         "//*[@id='app']/div/div/div[2]/div[1]/div/div[2]/div/div/span"
     );
     const QR = await page.$("canvas");
+    // Emits new QR image via webSocket
+    (function recheck() {
+        detectChange()
+            .then(async (res) => {
+                io.emit("QR", await QR.screenshot({ encoding: "base64" }));
+                recheck();
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    })();
     const img = await QR.screenshot({ encoding: "base64" });
     return img;
 };
