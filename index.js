@@ -1,3 +1,5 @@
+const checkLogin = require("./src/browser/checkLogin");
+
 /*******************************************
 
 ADD Terms and Conditions and Non Liability Notice.
@@ -5,5 +7,8 @@ ADD Terms and Conditions and Non Liability Notice.
 exports two modules
 
 ********************************************/
-
-const newServer = require("./src/newServer")();
+module.exports = {
+    createServer: require("./src/newServer"),
+    getQR: require("./src/browser/getQR"),
+    checkLogin: require("./src/browser/checkLoginOnce"),
+};

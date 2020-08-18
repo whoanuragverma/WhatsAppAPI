@@ -2,7 +2,7 @@ const puppeteer = require("puppeteer");
 
 module.exports = (async () => {
     const browser = await puppeteer.launch({
-        headless: false,
+        headless: true,
         args: ["-disable-features=RendererCodeIntegrity", "--no-sandbox"],
         timeout: 10000,
     });

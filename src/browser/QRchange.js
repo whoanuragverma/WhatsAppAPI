@@ -7,10 +7,6 @@ const detectChange = async () => {
                 .querySelector("canvas")
                 .toDataURL("image/png");
             setInterval(() => {
-                if (document.querySelector("canvas")) {
-                    console.log("Probably Logged In");
-                    reject("Logged In");
-                }
                 var n = document.querySelector("canvas").toDataURL("image/png");
                 if (n !== previous) {
                     previous = n;

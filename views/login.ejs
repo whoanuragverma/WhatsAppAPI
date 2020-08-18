@@ -78,6 +78,15 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.js"></script>
     </head>
     <body>
+        <script>
+            setInterval(() => {
+                if (sessionStorage.getItem("WAToken")) {
+                    document.querySelector("h2").innerText =
+                        "You have successfully Logged In";
+                    document.querySelector(".img").remove();
+                }
+            }, 100);
+        </script>
         <div class="main">
             <h2>Scan this QR code with WhatsApp.</h2>
             <div class="img">
@@ -122,9 +131,13 @@
                 }
                 document.querySelector(".img").appendChild(img);
             });
-        });
-        socket.on("disconnect", () => {
-            window.location.reload();
+            socket.on("LogIn", (data) => {
+                console.log("[CLIENT] Login Done");
+                sessionStorage.setItem("WAToken", data);
+                document.querySelector("h2").innerText =
+                    "You have successfully Logged In";
+                document.querySelector(".img").remove();
+            });
         });
     </script>
 </html>
