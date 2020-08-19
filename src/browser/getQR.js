@@ -48,9 +48,7 @@ module.exports = async (io = undefined) => {
                             }
                             recheck();
                         })
-                        .catch((err) => {
-                            console.log(err);
-                        });
+                        .catch((err) => {});
                 })();
                 const img = await QR.screenshot({ encoding: "base64" });
                 resolve(img);

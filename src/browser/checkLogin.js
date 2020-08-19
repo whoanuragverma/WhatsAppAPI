@@ -5,7 +5,7 @@ const checkLogin = async () => {
             setInterval(() => {
                 const token = localStorage.getItem("WAToken1");
                 if (token != null) {
-                    resolve(token);
+                    resolve(true);
                 }
             }, 500);
         });
