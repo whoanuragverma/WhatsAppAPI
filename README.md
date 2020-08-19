@@ -21,10 +21,10 @@ Below is a basic implementation of sending message via the API.
 ```javascript
 const WAPI = require('whatsappapi');
 
-WAPI.createSever();
+WAPI.createServer();
 WAPI.awaitLogin()
     .then(()=>{
-         WAPI.sendMessage("+919876543210","Hello,\nThis message is sent via WhatsAppAPI)
+         WAPI.sendMessage("+919876543210","Hello,\nThis message is sent via WhatsAppAPI")
              .then((res)=>console.log(res));
 // Prints when the message was sent
 });
