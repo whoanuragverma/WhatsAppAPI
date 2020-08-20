@@ -21,6 +21,7 @@ Below is a basic implementation of sending message via the API.
 ```javascript
 const WAPI = require("whatsappapi");
 
+<<<<<<< HEAD
 WAPI.createSever();
 WAPI.awaitLogin().then(() => {
     WAPI.sendMessage(
@@ -28,6 +29,14 @@ WAPI.awaitLogin().then(() => {
         "Hello,\nThis message is sent via WhatsAppAPI"
     ).then((res) => console.log(res));
     // Prints when the message was sent
+=======
+WAPI.createServer();
+WAPI.awaitLogin()
+    .then(()=>{
+         WAPI.sendMessage("+919876543210","Hello,\nThis message is sent via WhatsAppAPI")
+             .then((res)=>console.log(res));
+// Prints when the message was sent
+>>>>>>> 2daef597a3a63735823564e0ca5662f6147184e2
 });
 ```
 
