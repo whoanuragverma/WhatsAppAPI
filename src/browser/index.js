@@ -3,6 +3,7 @@ const puppeteer = require("puppeteer");
 module.exports = (async () => {
     const browser = await puppeteer.launch({
         headless: true,
+        userDataDir: "./chromium",
         args: ["-disable-features=RendererCodeIntegrity", "--no-sandbox"],
         timeout: 10000,
     });

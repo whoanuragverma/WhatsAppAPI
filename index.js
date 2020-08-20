@@ -4,4 +4,5 @@ module.exports = {
     checkLogin: require("./src/browser/checkLoginOnce"),
     awaitLogin: require("./src/browser/checkLogin"),
     sendMessage: require("./src/browser/sendMessage"),
+    unreadMessage: require("./src/browser/unreadMessages"),
 };

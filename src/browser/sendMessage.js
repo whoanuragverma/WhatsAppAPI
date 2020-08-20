@@ -12,8 +12,12 @@ const sendMessage = async (phone, text, image = undefined) => {
         await page.keyboard.up("Shift");
     }
     await page.keyboard.press("Enter");
+    page.on("dialog", async (dialog) => {
+        console.log(dialog.message());
+        await dialog.accept();
+    });
     return await page.evaluate(() => {
-        return new Promise((resolve) => {
+        return new Promise(async (resolve) => {
             resolve({
                 sentAt: document.querySelectorAll("._18lLQ")[
                     document.querySelectorAll("._18lLQ").length - 1
