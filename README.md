@@ -16,32 +16,34 @@ Warning: It will automatically download the latest chromium required by puppette
 
 Logging into WhatsApp is still a headache because of expired QRs. That is why I have added an express server that facilitates login. You don't need to handle QR changes and all. All you do is just scan the QR.
 
-Below is a basic implementation of sending message via the API.
+Below is a basic implementation of sending message and getting unread Messages via the API.
 
 ```javascript
-const WAPI = require("whatsappapi");
+const WAPI = require("@whoanuragverma/whatsappapi");
 
-<<<<<<< HEAD
-WAPI.createSever();
-WAPI.awaitLogin().then(() => {
-    WAPI.sendMessage(
-        "+919876543210",
-        "Hello,\nThis message is sent via WhatsAppAPI"
-    ).then((res) => console.log(res));
-    // Prints when the message was sent
-=======
-WAPI.createServer();
-WAPI.awaitLogin()
-    .then(()=>{
-         WAPI.sendMessage("+919876543210","Hello,\nThis message is sent via WhatsAppAPI")
-             .then((res)=>console.log(res));
-// Prints when the message was sent
->>>>>>> 2daef597a3a63735823564e0ca5662f6147184e2
-});
+const main = async () => {
+    let login = await WAPI.checkLogin().then((r) => r);
+    if (!login) {
+        console.log("Login first...You only need to do this once.");
+        WAPI.createServer();
+    } else {
+        await WAPI.unreadMessage().then((r) => console.log(r));
+        await WAPI.sendMessage("+91987654321", "Hello,What's up").then((r) =>
+            console.log(r)
+        );
+        await WAPI.sendMessage("+919876543210", "Hello,What's up").then((r) =>
+            console.log(r)
+        );
+    }
+};
+
+main();
+
 ```
 
 ### Logging In
 
+**You need to do this only once.**
 ```javascript
 const WAPI = require("whatsappapi");
 
